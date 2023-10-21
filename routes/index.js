@@ -1,18 +1,11 @@
-// dependencies
-const path = require('path');
+const express = require('express');
 
+// Import our modular routers for /notes
+const notesRouter = require('./notes');
 
-// routing
-module.exports = (app) => {
+const app = express();
 
-  // creating routes and GET /notes should return the notes.html file.
-  
-  app.get('/notes', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/notes.html'));
-  });
+// Initialize notes route
+app.use('/notes', notesRouter);
 
-  // GET * should return the index.html file.
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/index.html'));
-  })
-};
+module.exports = app; 

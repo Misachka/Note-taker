@@ -1,52 +1,45 @@
+const notes = require('express').Router();
+const uniqid = require('uniqid');
+const { readAndAppend, readFromFile, readAndDelete } = require('../helpers/fsUtils');
 
-// dependencies 
-const path = require('path');
-const fs = require('fs')
+//Get all notes from db.json file
+notes.get('/', (req, res) =>
+  readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)))
+);
 
-// creates unique ids
-var uniqid = require('uniqid');
+//Create notes with unique ID and are stored in db.json
+notes.post('/', (req, res) => {
+    console.log(req.body)
+    const { title, text } = req.body;
+
+    if (req.body) {
+        const newNotes = {
+            id: uniqid,
+            title: title,
+            text: text,
+        };
+
+        readAndAppend(newNotes, './db/db.json');
+        res.json('New note has been created successfully!');
+
+    } else {
+        res.errored('Something went wrong...');
+    }
+});
+
+//Delete notes
+notes.delete('/api/notes/:id', (req, res) => {
+  // reading notes form db.json
+  let db = JSON.parse(fs.readFileSync('db/db.json'))
+  // removing note with id
+  let deleteNotes = db.filter(item => item.id !== req.params.id);
+  // Rewriting note to db.json
+  fs.writeFileSync('db/db.json', JSON.stringify(deleteNotes));
+  res.json(deleteNotes);
+  
+})
 
 
-// routing
-module.exports = (app) => {
-
-  // GET /api/notes will read the db.json file and return all saved notes as JSON.
-  app.get('/api/notes', (req, res) => {
-    res.sendFile(path.join(__dirname, '../db/db.json'));
-  });
-
-  // POST /api/notes should receive a new note to save on the request body and adds it to db.json file, and it will be returned as a new note to client.
-  app.post('/api/notes', (req, res) => {
-    let db = fs.readFileSync('db/db.json');
-    db = JSON.parse(db);
-    res.json(db);
-    // creating body for note
-    let userNote = {
-      title: req.body.title,
-      text: req.body.text,
-      // creating unique id for each note
-      id: uniqid(),
-    };
-    // pushing created note to  the db.json file
-    db.push(userNote);
-    fs.writeFileSync('db/db.json', JSON.stringify(db));
-    res.json(db);
-
-  });
-
-    // DELETE /api/notes/:id should receive a query parameter containing the id of a note to delete.
-    app.delete('/api/notes/:id', (req, res) => {
-        // reading notes form db.json
-        let db = JSON.parse(fs.readFileSync('db/db.json'))
-        // removing note with id
-        let deleteNotes = db.filter(item => item.id !== req.params.id);
-        // Rewriting note to db.json
-        fs.writeFileSync('db/db.json', JSON.stringify(deleteNotes));
-        res.json(deleteNotes);
-        
-      })
-
-};
-
+module.exports = notes;
 
 
