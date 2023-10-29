@@ -14,14 +14,16 @@
 - [License](#license)
 - [Contributing](#contributing)
 - [Tests](#tests)
-- [Questions](#questions)
 
 ## Installation
+
 ⚙️ Clone Repo
+
 ⚙️ Npm I
+
 ⚙️ Then run the app with node server
 
-OR visit Deployed URL: 
+OR visit Deployed URL: https://notetaker1-app-7509b884e644.herokuapp.com/
 
 
 ## Usage
