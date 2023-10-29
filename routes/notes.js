@@ -28,16 +28,18 @@ notes.post('/', (req, res) => {
 });
 
 //Delete notes
-notes.delete('/api/notes/:id', (req, res) => {
-  // reading notes form db.json
-  let db = JSON.parse(fs.readFileSync('db/db.json'))
-  // removing note with id
-  let deleteNotes = db.filter(item => item.id !== req.params.id);
-  // Rewriting note to db.json
-  fs.writeFileSync('db/db.json', JSON.stringify(deleteNotes));
-  res.json(deleteNotes);
-  
-})
+notes.delete('/:id', (req, res) => {
+  const { id } = req.params;
+
+  readAndDelete(id, './db/db.json', (err) => {
+      if (err) {
+          res.status(500).send('Could not delete note...');
+      }else {
+          res.status(200).send('Note has been deleted!');
+      }
+  });
+});
+
 
 
 module.exports = notes;

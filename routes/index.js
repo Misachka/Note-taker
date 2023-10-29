@@ -1,6 +1,6 @@
 const express = require('express');
 
-// Import our modular routers for /notes
+// Importing routes for module 
 const notesRouter = require('./notes');
 
 const app = express();
