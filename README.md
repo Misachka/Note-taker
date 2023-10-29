@@ -17,8 +17,11 @@
 - [Questions](#questions)
 
 ## Installation
+
 ⚙️ Clone Repo
+
 ⚙️ Npm I
+
 ⚙️ Then run the app with node server
 
 OR visit Deployed URL: 
