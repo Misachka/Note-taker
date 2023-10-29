@@ -1,5 +1,5 @@
 const notes = require('express').Router();
-const uniqid = require('uniqid');
+const { v4: uuidv4 } = require('uuid');
 const { readAndAppend, readFromFile, readAndDelete } = require('../helpers/fsUtils');
 
 //Get all notes from db.json file
@@ -14,7 +14,7 @@ notes.post('/', (req, res) => {
 
     if (req.body) {
         const newNotes = {
-            id: uniqid,
+            id: uuidv4(),
             title: title,
             text: text,
         };
